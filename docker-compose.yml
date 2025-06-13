@@ -1,0 +1,47 @@
+services:
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "5001:5001"
+    volumes:
+      - user_db:/app/database
+    environment:
+      - SECRET_KEY=changeme123
+
+  vault-service:
+    build:
+      context: ./vault-service
+      dockerfile: Dockerfile
+    container_name: vault-service
+    ports:
+      - "5002:5002"
+    volumes:
+      - vault_db:/app/database
+    environment:
+      - SECRET_KEY=changeme123
+      - UTILIZADOR_API_URL=http://user-service:5001
+    depends_on:
+      - user-service
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - user-service
+      - vault-service
+    environment:
+      - UTILIZADOR_API_URL=http://user-service:5001
+      - VAULT_API_URL=http://vault-service:5002
+      - SECRET_KEY=changeme123
+      - WTF_CSRF_SECRET_KEY=changeme123
+
+volumes:
+  user_db:
+  vault_db:

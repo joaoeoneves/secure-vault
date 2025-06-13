@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header text-center">
+        <h4>{{ 'Editar' if edit else 'Adicionar' }} {{ entry_type.replace('_',' ')|title }}</h4>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {{ form.hidden_tag() }}
+          {% for field in form if field.type not in ['CSRFToken','SubmitField'] %}
+            <div class="mb-3">
+              {{ field.label(class="form-label") }}
+              {{ field(class="form-control") }}
+            </div>
+          {% endfor %}
+          <button class="btn btn-success w-100">{{ form.submit.label.text }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

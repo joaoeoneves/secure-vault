@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>O Meu Cofre</h3>
+  <a href="{{ url_for('frontend.vault_select') }}" class="btn btn-primary">Adicionar Entrada</a>
+</div>
+
+{% if entries %}
+  <div class="list-group">
+    {% for e in entries %}
+      <div class="list-group-item">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <div>
+            <h5 class="mb-1">{{ e.title }}</h5>
+            <small class="text-muted">{{ e.type|replace('_',' ')|title }}</small>
+          </div>
+          <div class="btn-group">
+            <!-- Botão Ver -->
+            <button type="button"
+                    class="btn btn-sm btn-outline-info"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modal-{{ e.id }}">
+              Ver
+            </button>
+            <!-- Editar / Apagar -->
+            <a href="{{ url_for('frontend.vault_edit', entry_id=e.id) }}"
+               class="btn btn-sm btn-outline-secondary">Editar</a>
+            <form method="post" action="{{ url_for('frontend.vault_delete', entry_id=e.id) }}" class="d-inline">
+              <button class="btn btn-sm btn-outline-danger">Apagar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Modais de detalhe -->
+  {% for e in entries %}
+  <div class="modal fade" id="modal-{{ e.id }}" tabindex="-1" aria-labelledby="label-{{ e.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="label-{{ e.id }}">{{ e.title }} — {{ e.type|replace('_',' ')|title }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {% if e.type == 'password' %}
+            <p><strong>Username:</strong> {{ e.username }}</p>
+            <p><strong>Password:</strong> {{ e.password }}</p>
+          {% elif e.type == 'credit_card' %}
+            <p><strong>Número do Cartão:</strong> {{ e.card_number }}</p>
+            <p><strong>Validade:</strong> {{ e.expiry_date }}</p>
+            <p><strong>CVV:</strong> {{ e.cvv }}</p>
+          {% elif e.type == 'ssh_key' %}
+            <p><strong>SSH Key:</strong></p>
+            <pre>{{ e.ssh_key }}</pre>
+          {% elif e.type == 'note' %}
+            <p>{{ e.note_text }}</p>
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+{% else %}
+  <p>O seu cofre está vazio.</p>
+{% endif %}
+{% endblock %}

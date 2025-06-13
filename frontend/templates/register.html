@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-header text-center">
+        <h3>Registo</h3>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {{ form.hidden_tag() }}
+          <div class="mb-3">
+            {{ form.nomeUtilizador.label(class="form-label") }}
+            {{ form.nomeUtilizador(class="form-control", placeholder="Escolha um nome de utilizador") }}
+          </div>
+          <div class="mb-3">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control", placeholder="Password") }}
+          </div>
+          <button type="submit" class="btn btn-success w-100">{{ form.submit.label.text }}</button>
+        </form>
+        <div class="text-center mt-3">
+          <small>Já tem conta? <a href="{{ url_for('frontend.login') }}">Faça login</a></small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

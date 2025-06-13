@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-md-8 offset-md-2">
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h4>Dashboard</h4>
+      </div>
+      <div class="card-body">
+        <p class="lead">Bem-vindo, <strong>{{ nome }}</strong>!</p>
+        <p>Aqui pode adicionar funcionalidades protegidas: perfil, definições, etc.</p>
+        <a href="{{ url_for('frontend.logout') }}" class="btn btn-outline-secondary">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
