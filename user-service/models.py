@@ -31,5 +31,4 @@ class Utilizador(db.Model, UserMixin):
         return check_password_hash(self.password, senha)
 
     def update_api_key(self):
-        # Gera um token hex de 64 caracteres
         self.api_key = secrets.token_hex(32)

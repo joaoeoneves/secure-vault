@@ -9,7 +9,7 @@ services:
     volumes:
       - user_db:/app/database
     environment:
-      - SECRET_KEY=changeme123
+      - SECRET_KEY=superSecretKey
 
   vault-service:
     build:
@@ -21,7 +21,7 @@ services:
     volumes:
       - vault_db:/app/database
     environment:
-      - SECRET_KEY=changeme123
+      - SECRET_KEY=superSecretKey
       - UTILIZADOR_API_URL=http://user-service:5001
     depends_on:
       - user-service
@@ -39,8 +39,8 @@ services:
     environment:
       - UTILIZADOR_API_URL=http://user-service:5001
       - VAULT_API_URL=http://vault-service:5002
-      - SECRET_KEY=changeme123
-      - WTF_CSRF_SECRET_KEY=changeme123
+      - SECRET_KEY=superSecretKey
+      - WTF_CSRF_SECRET_KEY=superSecretKey
 
 volumes:
   user_db:

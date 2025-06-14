@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_fernet():
-    secret = os.getenv("SECRET_KEY", "defaultsecret").encode()
+    secret = os.getenv("SECRET_KEY", "superSecretKey").encode()
     key = base64.urlsafe_b64encode(secret.ljust(32, b'0')[:32])
     return Fernet(key)
 

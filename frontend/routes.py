@@ -1,5 +1,3 @@
-# frontend/routes.py
-
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from forms import (
     LoginForm, RegistrationForm,
@@ -10,10 +8,7 @@ from forms import (
 from api.utilizador_api import UtilizadorApi
 from api.vault_api import VaultApi
 
-# ❗ O blueprint DEVE vir antes de usá-lo nos decorators
 blueprint = Blueprint('frontend', __name__)
-
-# — Autenticação e páginas básicas —
 
 @blueprint.route('/')
 def home():
@@ -57,8 +52,6 @@ def logout():
     session.clear()
     flash('Sessão terminada.')
     return redirect(url_for('frontend.login'))
-
-# — Rotas do Cofre —
 
 @blueprint.route('/vault')
 def vault():
