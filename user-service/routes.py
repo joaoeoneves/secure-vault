@@ -1,6 +1,7 @@
-from flask import Blueprint, jsonify, request, make_response
-from models import db, Utilizador
-from flask_login import login_user, logout_user, current_user
+from flask import Blueprint, jsonify, request
+from flask_login import login_user
+from flask_login import current_user
+from facade import UtilizadorFacade
 
 utilizador_bp = Blueprint('utilizador_api', __name__, url_prefix='/api/utilizador')
 
@@ -11,14 +12,9 @@ def criar_utilizador():
     if not nome or not senha:
         return jsonify({"message": "nomeUtilizador e password são obrigatórios."}), 400
 
-    if Utilizador.query.filter_by(nomeUtilizador=nome).first():
-        return jsonify({"message": "Utilizador já existe."}), 409
-
-    user = Utilizador(nomeUtilizador=nome)
-    user.set_password(senha)
-    user.update_api_key()
-    db.session.add(user)
-    db.session.commit()
+    user, erro = UtilizadorFacade.criar_utilizador(nome, senha)
+    if erro:
+        return jsonify({"message": erro}), 409
 
     return jsonify(user.serializar()), 201
 
@@ -26,18 +22,16 @@ def criar_utilizador():
 def login():
     nome = request.form.get('nomeUtilizador')
     senha = request.form.get('password')
-    user = Utilizador.query.filter_by(nomeUtilizador=nome).first()
-    if not user or not user.check_password(senha):
+    user = UtilizadorFacade.autenticar_utilizador(nome, senha)
+    if not user:
         return jsonify({"message": "Credenciais inválidas."}), 401
 
-    user.update_api_key()
-    db.session.commit()
     login_user(user)
     return jsonify({"api_key": user.api_key})
 
 @utilizador_bp.route('/<nomeUtilizador>/existe', methods=['GET'])
 def existe_utilizador(nomeUtilizador):
-    existe = Utilizador.query.filter_by(nomeUtilizador=nomeUtilizador).first() is not None
+    existe = UtilizadorFacade.existe_utilizador(nomeUtilizador)
     return jsonify({"result": existe}), (200 if existe else 404)
 
 @utilizador_bp.route('/', methods=['GET'])
