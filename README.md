@@ -20,15 +20,15 @@ O sistema é composto por **3 microserviços de negócio**, cada um com um Desig
 
 ### 1️⃣ User Management Service
 - **Responsabilidade:** gestão de utilizadores e autenticação.
-- **Design Pattern:** *Facade Pattern* (dos slides).
+- **Design Pattern:** *Facade Pattern* para disponibilização simples dos métodos (dos slides) + Singleton para DB propria (SQLAlchemy).
 
 ### 2️⃣ Vault Service (Cofre)
-- **Responsabilidade:** guardar e gerir entradas encriptadas (Passwords, Notas, Cartões Bancários e Chaves SSH. Todas com formulários adaptados).
-- **Design Pattern:** *Factory Method* para a criação dos diferentes tipos (dos slides) + Singleton para DB própria (SQLite).
+- **Responsabilidade:** guardar e gerir entradas encriptadas (Passwords, Notas, Cartões Bancários e Chaves SSH).
+- **Design Pattern:** *Factory Method* para a criação dos diferentes tipos (dos slides) + Singleton para DB propria (SQLAlchemy).
   
 ### 3️⃣ Credential Health Service
 - **Responsabilidade:** avaliar a "saúde" das credenciais (passwords fracas, reutilizadas, não atualizadas, cartões expirados, etc.).
-- **Design Pattern:** *Chain of Responsibility* (padrão extra-aulas), vai passando por estágios mencionados até chegar a uma conclusão.
+- **Design Pattern:** *Chain of Responsibility* (padrão extra-aulas), vai passando pelos estágios mencionados até chegar a uma conclusão.
 
 ### ➕ Frontend
 - **Responsabilidade:** interface simples para demonstrar a arquitetura (login/registo, cofre de entradas, resultados de health check das passwords).
