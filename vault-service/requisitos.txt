@@ -2,3 +2,5 @@ Flask
 Flask-SQLAlchemy
 Flask-Migrate
 requests
+cryptography
+dotenv

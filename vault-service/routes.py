@@ -1,14 +1,9 @@
-# vault-service/routes.py
-
-import os
-import requests
 from flask import Blueprint, request, jsonify, abort
-from database import Database
+from database import db
 from factory import EntryFactory
 from models import BaseEntry
-
-# Obtém o singleton do SQLAlchemy
-db = Database.get_db()
+import os
+import requests
 
 vault_bp = Blueprint('vault_api', __name__, url_prefix='/api/vault')
 
@@ -33,7 +28,6 @@ def create_entry():
     user = authenticate()
     payload = request.get_json()
 
-    # Extrai type e title, e remove-os do payload
     entry_type = payload.get('type')
     title      = payload.get('title')
     data       = {k: v for k, v in payload.items() if k not in ('type', 'title')}
@@ -60,11 +54,9 @@ def update_entry(entry_id):
     title      = payload.get('title')
     data       = {k: v for k, v in payload.items() if k not in ('type', 'title')}
 
-    # Atualiza campos básicos
     existing.type  = entry_type
     existing.title = title
 
-    # Reconstrói o campo data via factory
     new_entry = EntryFactory.create_entry(
         entry_type,
         user_id=user['id'],

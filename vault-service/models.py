@@ -1,7 +1,5 @@
-from database import Database
-from sqlalchemy.dialects.sqlite import JSON
-
-db = Database.get_db()
+from database import db
+from crypto import decrypt
 
 class BaseEntry(db.Model):
     __tablename__ = 'entries'
@@ -9,7 +7,7 @@ class BaseEntry(db.Model):
     user_id  = db.Column(db.Integer, nullable=False)
     type     = db.Column(db.String(50), nullable=False)
     title    = db.Column(db.String(100), nullable=False)
-    data     = db.Column(JSON, nullable=False)
+    data     = db.Column(db.JSON, nullable=False)
 
     def to_dict(self):
         out = {
@@ -18,5 +16,5 @@ class BaseEntry(db.Model):
             'type': self.type,
             'title': self.title,
         }
-        out.update(self.data)
+        out.update(decrypt(self.data))
         return out

@@ -1,19 +1,18 @@
 import os
 from flask import Flask
 from flask_migrate import Migrate
-from database import Database
+from database import db
 from routes import vault_bp
 
 def create_app():
     app = Flask(__name__)
     app.config.update({
-      'SECRET_KEY': os.getenv('SECRET_KEY', 'muda_isto'),
-      'SQLALCHEMY_DATABASE_URI': 'sqlite:///' + os.path.join(os.getcwd(),'database','vault.db'),
-      'SQLALCHEMY_TRACK_MODIFICATIONS': False
+        'SECRET_KEY': os.getenv('SECRET_KEY', 'muda_isto'),
+        'SQLALCHEMY_DATABASE_URI': 'sqlite:///' + os.path.join(os.getcwd(), 'database', 'vault.db'),
+        'SQLALCHEMY_TRACK_MODIFICATIONS': False
     })
 
-    Database.init_app(app)
-    db = Database.get_db()
+    db.init_app(app)
     Migrate(app, db)
 
     os.makedirs('database', exist_ok=True)
