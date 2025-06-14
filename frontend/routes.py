@@ -22,9 +22,10 @@ def login():
         if api_key:
             session['api_key'] = api_key
             session['nomeUtilizador'] = form.nomeUtilizador.data
-            flash('Login efetuado com sucesso.')
+            flash('Login efetuado com sucesso.', 'success')
             return redirect(url_for('frontend.dashboard'))
-        flash('Credenciais inválidas.')
+        # aqui passamos a categoria 'danger' para vermelho
+        flash('Credenciais inválidas.', 'danger')
     return render_template('login.html', form=form)
 
 @blueprint.route('/register', methods=['GET','POST'])
@@ -32,25 +33,26 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         if UtilizadorApi.existe(form.nomeUtilizador.data):
-            flash('Nome de utilizador já existe.')
+            flash('Nome de utilizador já existe.', 'warning')
         else:
             user = UtilizadorApi.criar_Utilizador(form)
             if user:
-                flash('Registo efetuado. Faça login.')
+                flash('Registo efetuado. Faça login.', 'success')
                 return redirect(url_for('frontend.login'))
+            flash('Erro no registo.', 'danger')
     return render_template('register.html', form=form)
 
 @blueprint.route('/dashboard')
 def dashboard():
     if 'api_key' not in session:
-        flash('Faça login primeiro.')
+        flash('Faça login primeiro.', 'warning')
         return redirect(url_for('frontend.login'))
     return render_template('dashboard.html', nome=session.get('nomeUtilizador'))
 
 @blueprint.route('/logout')
 def logout():
     session.clear()
-    flash('Sessão terminada.')
+    flash('Sessão terminada.', 'info')
     return redirect(url_for('frontend.login'))
 
 @blueprint.route('/vault')
@@ -120,3 +122,12 @@ def vault_delete(entry_id):
     else:
         flash('Erro ao apagar.')
     return redirect(url_for('frontend.vault'))
+
+@blueprint.route('/proxy/vault/entries/<int:entry_id>/health')
+def proxy_vault_health(entry_id):
+    api_key = session.get("api_key")
+    if not api_key:
+        return {"status": "error", "reason": "Não autenticado"}, 401
+
+    from api.vault_api import VaultApi
+    return VaultApi.get_health(api_key, entry_id), 200

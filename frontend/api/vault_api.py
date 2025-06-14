@@ -33,3 +33,11 @@ class VaultApi:
             headers={'Authorization': api_key}
         )
         return r.status_code == 200
+
+    @staticmethod
+    def get_health(api_key, entry_id):
+        r = requests.get(
+            f"{VAULT_API_URL}/api/vault/entries/{entry_id}/health",
+            headers={'Authorization': api_key}
+        )
+        return r.json() if r.status_code == 200 else {"status": "error", "reason": "Erro ao avaliar saúde"}

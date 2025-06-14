@@ -15,26 +15,34 @@
             <small class="text-muted">{{ e.type|replace('_',' ')|title }}</small>
           </div>
           <div class="btn-group">
-            <!-- Botão Ver -->
             <button type="button"
                     class="btn btn-sm btn-outline-info"
                     data-bs-toggle="modal"
                     data-bs-target="#modal-{{ e.id }}">
               Ver
             </button>
-            <!-- Editar / Apagar -->
             <a href="{{ url_for('frontend.vault_edit', entry_id=e.id) }}"
                class="btn btn-sm btn-outline-secondary">Editar</a>
             <form method="post" action="{{ url_for('frontend.vault_delete', entry_id=e.id) }}" class="d-inline">
               <button class="btn btn-sm btn-outline-danger">Apagar</button>
             </form>
+            <button type="button"
+                    class="btn btn-sm btn-outline-success avaliar-btn"
+                    data-entry-id="{{ e.id }}">
+              Avaliar Saúde
+            </button>
           </div>
+        </div>
+        <div class="mt-2">
+          <small class="resultado-saude text-muted d-flex align-items-center gap-2" id="resultado-{{ e.id }}">
+            <span class="icon-saude" id="icon-{{ e.id }}" title="Ainda não avaliado">⚪</span>
+            <span class="texto-saude"></span>
+          </small>
         </div>
       </div>
     {% endfor %}
   </div>
 
-  <!-- Modais de detalhe -->
   {% for e in entries %}
   <div class="modal fade" id="modal-{{ e.id }}" tabindex="-1" aria-labelledby="label-{{ e.id }}" aria-hidden="true">
     <div class="modal-dialog">
@@ -69,4 +77,47 @@
 {% else %}
   <p>O seu cofre está vazio.</p>
 {% endif %}
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".avaliar-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const entryId = btn.dataset.entryId;
+      const spanResultado = document.querySelector("#resultado-" + entryId + " .texto-saude");
+      const spanIcone = document.getElementById("icon-" + entryId);
+
+      spanResultado.textContent = "A verificar...";
+      spanResultado.style.color = "black";
+      spanIcone.textContent = "⚪";
+      spanIcone.title = "A verificar...";
+
+      try {
+        const resp = await fetch(`/proxy/vault/entries/${entryId}/health`);
+        const data = await resp.json();
+        spanResultado.textContent = data.reason;
+
+        if (data.status === "green") {
+          spanResultado.style.color = "green";
+          spanIcone.textContent = "🟢";
+          spanIcone.title = "Entrada saudável";
+        } else if (data.status === "yellow") {
+          spanResultado.style.color = "orange";
+          spanIcone.textContent = "🟡";
+          spanIcone.title = "Entrada com riscos médios";
+        } else {
+          spanResultado.style.color = "red";
+          spanIcone.textContent = "🔴";
+          spanIcone.title = "Entrada fraca/insegura";
+        }
+
+      } catch (error) {
+        spanResultado.textContent = "Erro ao verificar saúde.";
+        spanResultado.style.color = "gray";
+        spanIcone.textContent = "⚫";
+        spanIcone.title = "Erro ao contactar o serviço";
+      }
+    });
+  });
+});
+</script>
 {% endblock %}

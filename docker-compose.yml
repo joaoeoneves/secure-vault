@@ -25,6 +25,15 @@ services:
       - UTILIZADOR_API_URL=http://user-service:5001
     depends_on:
       - user-service
+      - health-service
+
+  health-service:
+    build:
+      context: ./health-service
+      dockerfile: Dockerfile
+    container_name: health-service
+    ports:
+      - "5003:5003"
 
   frontend:
     build:
@@ -33,14 +42,14 @@ services:
     container_name: frontend
     ports:
       - "5000:5000"
-    depends_on:
-      - user-service
-      - vault-service
     environment:
       - UTILIZADOR_API_URL=http://user-service:5001
       - VAULT_API_URL=http://vault-service:5002
       - SECRET_KEY=superSecretKey
       - WTF_CSRF_SECRET_KEY=superSecretKey
+    depends_on:
+      - user-service
+      - vault-service
 
 volumes:
   user_db:

@@ -77,3 +77,25 @@ def delete_entry(entry_id):
     db.session.delete(entry)
     db.session.commit()
     return jsonify({'message': 'Deleted'})
+
+@vault_bp.route('/entries/<int:entry_id>/health', methods=['GET'])
+def entry_health(entry_id):
+    user = authenticate()
+    # Recolhe todas as entradas do utilizador
+    all_entries = BaseEntry.query.filter_by(user_id=user['id']).all()
+    target = next((e for e in all_entries if e.id == entry_id), None)
+    if not target:
+        abort(404)
+    # Prepara payload com entry individual + lista completa
+    payload = {
+        "entry": target.to_dict(),
+        "all_entries": [e.to_dict() for e in all_entries]
+    }
+    try:
+        resp = requests.post(
+            "http://health-service:5003/api/health/check",
+            json=payload
+        )
+        return jsonify(resp.json()), resp.status_code
+    except Exception:
+        return jsonify({"status": "error", "reason": "Erro ao contactar health-service"}), 500
