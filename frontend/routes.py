@@ -24,7 +24,6 @@ def login():
             session['nomeUtilizador'] = form.nomeUtilizador.data
             flash('Login efetuado com sucesso.', 'success')
             return redirect(url_for('frontend.dashboard'))
-        # aqui passamos a categoria 'danger' para vermelho
         flash('Credenciais inválidas.', 'danger')
     return render_template('login.html', form=form)
 

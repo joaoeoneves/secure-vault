@@ -3,7 +3,6 @@ import string
 
 class PasswordWeaknessChecker(Checker):
     def check(self, payload):
-        # extrai entry real
         entry = payload.get("entry", payload)
         if entry.get("type") != "password":
             return HealthCheckResult()

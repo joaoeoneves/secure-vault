@@ -2,7 +2,6 @@ from checker.base import Checker, HealthCheckResult
 
 class PasswordReuseChecker(Checker):
     def check(self, payload):
-        # payload pode ter {"entry": {...}, "all_entries": [...]}
         entry_list = payload.get("all_entries", [])
         entry      = payload.get("entry", payload)
 

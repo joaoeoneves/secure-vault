@@ -59,7 +59,7 @@ Projeto desenvolvido por:
 
 ---
 
-## 🚀 Objetivos Pedagógicos
+## ✅ Objetivos Pedagógicos
 
 - Aplicação prática dos conceitos de **microserviços**.
 - Aplicação de **3 Design Patterns**:
@@ -67,6 +67,15 @@ Projeto desenvolvido por:
   - 1 padrão **extra e criativo** (Chain of Responsibility).
 - Demonstração de um sistema **desacoplado**, **modular** e **escalável**.
 - Exploração de tecnologias modernas.
+
+---
+
+## 🚀 Como Correr?
+
+1. Abrir a pasta clonada do repositório
+2. ``` docker compose build ```
+3. ``` docker compose run ```
+4. Abrir localhost:5000 no browser
 
 ---
 
