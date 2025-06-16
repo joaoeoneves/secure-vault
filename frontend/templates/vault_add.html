@@ -9,7 +9,9 @@
       <div class="card-body">
         <form method="post">
           {{ form.hidden_tag() }}
-          {% for field in form if field.type not in ['CSRFToken','SubmitField'] %}
+          {% for field in form
+               if field.name != 'csrf_token'
+                  and field.type != 'SubmitField' %}
             <div class="mb-3">
               {{ field.label(class="form-label") }}
               {{ field(class="form-control") }}
