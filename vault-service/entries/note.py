@@ -2,6 +2,7 @@ from entries.base import EntryCreator
 from models import BaseEntry
 from crypto import encrypt
 
+# Criador de entradas do tipo "note"
 class NoteEntryCreator(EntryCreator):
     def create(self, user_id, title, **kwargs):
         data = {

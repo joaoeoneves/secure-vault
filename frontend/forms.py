@@ -2,16 +2,19 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, SelectField, SubmitField
 from wtforms.validators import DataRequired
 
+# Formulário de login
 class LoginForm(FlaskForm):
     nomeUtilizador = StringField('Nome de Utilizador', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
+# Formulário de registo
 class RegistrationForm(FlaskForm):
     nomeUtilizador = StringField('Nome de Utilizador', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Registar')
 
+# Formulário para selecionar o tipo de entrada do cofre
 class SelectEntryTypeForm(FlaskForm):
     entry_type = SelectField(
         'Tipo',
@@ -25,6 +28,7 @@ class SelectEntryTypeForm(FlaskForm):
     )
     submit = SubmitField('Seguinte')
 
+# Formulários para cada tipo de entrada do cofre
 class PasswordEntryForm(FlaskForm):
     title    = StringField('Título', validators=[DataRequired()])
     username = StringField('Username', validators=[DataRequired()])

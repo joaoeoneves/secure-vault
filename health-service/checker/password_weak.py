@@ -1,6 +1,7 @@
 from checker.base import Checker, HealthCheckResult
 import string
 
+# Checker que avalia a força da password (tamanho e variedade de caracteres).
 class PasswordWeaknessChecker(Checker):
     def check(self, payload):
         entry = payload.get("entry", payload)

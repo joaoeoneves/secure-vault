@@ -1,5 +1,6 @@
 from checker.base import Checker, HealthCheckResult
 
+# Checker que verifica se a password está a ser reutilizada noutras entradas.
 class PasswordReuseChecker(Checker):
     def check(self, payload):
         entry_list = payload.get("all_entries", [])

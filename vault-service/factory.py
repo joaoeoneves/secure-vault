@@ -3,6 +3,7 @@ from entries.credit_card import CreditCardEntryCreator
 from entries.note import NoteEntryCreator
 from entries.ssh_key import SSHKeyEntryCreator
 
+# Padrão Factory: permite criar diferentes tipos de entradas de forma flexível
 class EntryFactory:
     creators = {
         'password': PasswordEntryCreator(),

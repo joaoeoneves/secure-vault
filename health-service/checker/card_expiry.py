@@ -2,6 +2,7 @@ from checker.base import Checker, HealthCheckResult
 from datetime import datetime
 from calendar import monthrange
 
+# Checker que verifica se o cartão de crédito está expirado.
 class CardExpiryChecker(Checker):
     def check(self, payload):
         entry = payload.get("entry", payload)

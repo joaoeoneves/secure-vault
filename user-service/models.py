@@ -4,6 +4,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import secrets
 
+# Modelo de dados para o utilizador.
+# Herda de UserMixin para integração com Flask-Login.
 class Utilizador(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     nomeUtilizador = db.Column(db.String(50), unique=True, nullable=False)
@@ -15,6 +17,7 @@ class Utilizador(db.Model, UserMixin):
     def __repr__(self):
         return f"<Utilizador {self.nomeUtilizador}>"
 
+    # Serializa o utilizador para dicionário (útil para respostas JSON)
     def serializar(self):
         return {
             "id": self.id,
@@ -24,11 +27,14 @@ class Utilizador(db.Model, UserMixin):
             "ativo": self.ativo,
         }
 
+    # Guarda a password de forma segura (hash)
     def set_password(self, senha):
         self.password = generate_password_hash(senha)
 
+    # Verifica se a password fornecida está correta
     def check_password(self, senha):
         return check_password_hash(self.password, senha)
 
+    # Gera uma nova API key para o utilizador (autenticação por token)
     def update_api_key(self):
         self.api_key = secrets.token_hex(32)
