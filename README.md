@@ -74,7 +74,7 @@ Projeto desenvolvido por:
 
 1. Abrir a pasta clonada do repositório
 2. ``` docker compose build ```
-3. ``` docker compose run ```
+3. ``` docker compose up ```
 4. Abrir localhost:5000 no browser
 
 ---
